@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  LUME MED SPA — Light luxury / serene minimal direction.
+  Palette: champagne (#F3E9E3) + blush (#E7C9BC) + warm sand, muted plum accent (#6E4A63) and bronze (#8C5A4A).
+  Type: Cormorant Garamond display serif over Jost sans for an airy, expensive, calming feel.
+  Signature motion: scrubbed word-by-word philosophy reveal + gentle image scale-on-scroll. All motion guarded behind prefers-reduced-motion.
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lume Med Spa — Aesthetic Medicine & Skin Wellness</title>
+  <meta name="description" content="Lume Med Spa offers physician-led injectables, medical facials, laser treatments, body contouring and IV wellness in a serene, light-luxury setting." />
+  <meta property="og:title" content="Lume Med Spa — Aesthetic Medicine & Skin Wellness" />
+  <meta property="og:description" content="Physician-led aesthetic care in a calm, considered space. Book a complimentary consultation." />
+  <meta property="og:image" content="https://picsum.photos/seed/lumespa-og/1200/630" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23F3E9E3'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='%236E4A63' text-anchor='middle'%3EL%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            champagne: '#F3E9E3',
+            blush: '#E7C9BC',
+            sand: '#DCC9B6',
+            taupe: '#A89384',
+            plum: '#6E4A63',
+            'plum-deep': '#523549',
+            bronze: '#8C5A4A',
+            ink: '#3A2E2A',
+            cream: '#FBF6F2',
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['Jost', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+          letterSpacing: {
+            luxe: '0.28em',
+          },
+        },
+      },
+    };
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background-color: #FBF6F2; color: #3A2E2A; -webkit-font-smoothing: antialiased; }
+
+    ::selection { background: #6E4A63; color: #FBF6F2; }
+
+    .label-luxe {
+      font-family: 'Jost', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      font-weight: 500;
+      font-size: 0.72rem;
+    }
+
+    /* Soft, luminous image treatment */
+    .lume-img {
+      filter: saturate(0.82) contrast(0.96) brightness(1.04);
+    }
+    .lume-frame {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1.25rem;
+      box-shadow: 0 40px 80px -48px rgba(82, 53, 73, 0.55);
+    }
+    .lume-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(155deg, rgba(243,233,227,0.18), rgba(110,74,99,0.16));
+      mix-blend-mode: multiply;
+      pointer-events: none;
+    }
+
+    .glass {
+      background: rgba(251, 246, 242, 0.62);
+      backdrop-filter: blur(18px) saturate(120%);
+      -webkit-backdrop-filter: blur(18px) saturate(120%);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.7) inset, 0 24px 60px -36px rgba(82,53,73,0.4);
+    }
+
+    .grain::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    a, button { -webkit-tap-highlight-color: transparent; }
+    :focus-visible {
+      outline: 2px solid #6E4A63;
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    .word { display: inline-block; }
+
+    .service-card { transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.5s cubic-bezier(0.16,1,0.3,1); }
+    @media (hover: hover) {
+      .service-card:hover { transform: translateY(-6px); box-shadow: 0 36px 64px -40px rgba(82,53,73,0.5); }
+      .service-card:hover .service-arrow { transform: translateX(5px); opacity: 1; }
+    }
+    .service-arrow { transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease; opacity: 0.5; }
+
+    .btn-primary { transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease, background-color 0.3s ease; }
+    @media (hover: hover) {
+      .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 36px -16px rgba(82,53,73,0.6); }
+      .btn-ghost:hover { background-color: rgba(110,74,99,0.06); }
+    }
+    .btn-primary:active, .btn-ghost:active { transform: translateY(1px); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .service-card, .btn-primary, .service-arrow { transition: none; }
+    }
+  </style>
+</head>
+
+<body class="font-sans antialiased overflow-x-hidden grain">
+
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-5 focus:py-3 focus:rounded-full focus:bg-plum focus:text-cream focus:text-sm">Skip to content</a>
+
+  <!-- NAV -->
+  <header class="fixed top-0 inset-x-0 z-50 px-4 sm:px-6 pt-3 sm:pt-4">
+    <nav aria-label="Main navigation" class="glass mx-auto max-w-7xl rounded-full px-5 sm:px-7 py-3 flex items-center justify-between">
+      <a href="#main" class="flex items-center gap-2 group" aria-label="Lume Med Spa home">
+        <span aria-hidden="true" class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-plum/30 text-plum font-display text-xl leading-none">L</span>
+        <span class="font-display text-2xl tracking-wide text-ink leading-none">Lume<span class="text-plum"> Med Spa</span></span>
+      </a>
+
+      <div class="hidden lg:flex items-center gap-9 text-sm text-ink/75 font-medium">
+        <a href="#services" class="hover:text-plum transition-colors">Services</a>
+        <a href="#about" class="hover:text-plum transition-colors">Our Care</a>
+        <a href="#philosophy" class="hover:text-plum transition-colors">Philosophy</a>
+        <a href="#testimonials" class="hover:text-plum transition-colors">Results</a>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-4">
+        <a href="tel:+13128471928" class="hidden sm:flex items-center gap-2 text-sm font-medium text-ink/75 hover:text-plum transition-colors" aria-label="Call Lume Med Spa">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+          <span>(312) 847-1928</span>
+        </a>
+        <a href="#book" class="btn-primary inline-flex items-center justify-center min-h-[44px] rounded-full bg-plum px-5 py-2.5 text-sm font-medium text-cream">
+          Book Consultation
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main" class="relative z-10">
+
+    <!-- HERO -->
+    <section aria-labelledby="hero-heading" class="relative min-h-[100svh] flex items-center pt-32 pb-20 overflow-hidden">
+      <div class="absolute inset-0 -z-10" aria-hidden="true">
+        <div class="absolute inset-0 bg-gradient-to-b from-champagne via-cream to-cream"></div>
+        <div class="absolute -top-24 -right-24 h-[42rem] w-[42rem] rounded-full bg-blush/50 blur-3xl"></div>
+        <div class="absolute top-1/3 -left-32 h-[34rem] w-[34rem] rounded-full bg-plum/10 blur-3xl"></div>
+      </div>
+
+      <div class="mx-auto w-full max-w-7xl px-6 grid lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-7">
+          <p class="label-luxe text-plum mb-6" data-hero>Physician-led aesthetic medicine</p>
+          <h1 id="hero-heading" data-hero class="font-display font-500 text-ink leading-[1.02]" style="font-size: clamp(2.5rem, 5vw, 5.5rem);">
+            Considered care for skin that looks like you, only rested.
+          </h1>
+          <p data-hero class="mt-7 max-w-xl text-lg text-ink/70 leading-relaxed">
+            A calm, light-filled studio where board-certified providers tailor every treatment to your face, your goals, and your pace. No pressure, no templates — just thoughtful results.
+          </p>
+          <div data-hero class="mt-10 flex flex-col sm:flex-row gap-4">
+            <a href="#book" class="btn-primary inline-flex items-center justify-center min-h-[52px] rounded-full bg-plum px-8 text-base font-medium text-cream">
+              Book a complimentary consultation
+            </a>
+            <a href="#services" class="btn-ghost inline-flex items-center justify-center gap-2 min-h-[52px] rounded-full border border-plum/30 px-8 text-base font-medium text-plum">
+              Explore treatments
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5" data-hero>
+          <div class="lume-frame aspect-[4/5] max-w-md mx-auto lg:ml-auto">
+            <img src="https://picsum.photos/seed/lumespa-hero/900/1125" width="900" height="1125" alt="Serene treatment room at Lume Med Spa with soft natural light" class="lume-img h-full w-full object-cover" fetchpriority="high" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES (bento) -->
+    <section id="services" aria-labelledby="services-heading" class="py-24 md:py-40 px-6">
+      <div class="mx-auto max-w-7xl">
+        <div class="max-w-2xl mb-16">
+          <p class="label-luxe text-bronze mb-5" data-reveal>The menu</p>
+          <h2 id="services-heading" data-reveal class="font-display font-500 text-ink leading-[1.05]" style="font-size: clamp(2rem, 3.6vw, 3.5rem);">
+            Treatments chosen with restraint, delivered with precision.
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 auto-rows-[minmax(190px,auto)] gap-4 grid-flow-dense">
+          <!-- Injectables (large) -->
+          <article data-reveal class="service-card glass rounded-3xl p-8 md:col-span-2 md:row-span-2 flex flex-col justify-between">
+            <div>
+              <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-plum/10 text-plum" aria-hidden="true">
+                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 2 4 4M17 3l4 4-11 11H6v-4L17 3Z"/><path d="m8.5 11.5 4 4"/></svg>
+              </span>
+              <h3 class="mt-6 font-display text-3xl text-ink">Injectables</h3>
+              <p class="mt-3 max-w-md text-ink/70 leading-relaxed">Neuromodulators and dermal fillers placed conservatively to soften lines and restore balance — refreshed, never frozen. Mapped to your anatomy in consultation first.</p>
+            </div>
+            <div class="mt-8 flex items-center justify-between">
+              <span class="label-luxe text-bronze">Botox &middot; Filler &middot; from $12/unit</span>
+              <svg class="service-arrow h-5 w-5 text-plum" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>
+            </div>
+          </article>
+
+          <!-- Medical facials -->
+          <article data-reveal class="service-card glass rounded-3xl p-7 flex flex-col justify-between">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-bronze/10 text-bronze" aria-hidden="true">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
+            </span>
+            <div class="mt-5">
+              <h3 class="font-display text-2xl text-ink">Medical Facials</h3>
+              <p class="mt-2 text-sm text-ink/65 leading-relaxed">Hydrafacial and clinical peels for clarity and glow.</p>
+              <span class="label-luxe text-bronze mt-3 block">from $165</span>
+            </div>
+          </article>
+
+          <!-- Laser -->
+          <article data-reveal class="service-card glass rounded-3xl p-7 flex flex-col justify-between">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-plum/10 text-plum" aria-hidden="true">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.9 2.9M16.2 16.2l2.9 2.9M2 12h4M18 12h4M4.9 19.1l2.9-2.9M16.2 7.8l2.9-2.9"/><circle cx="12" cy="12" r="3"/></svg>
+            </span>
+            <div class="mt-5">
+              <h3 class="font-display text-2xl text-ink">Laser Treatments</h3>
+              <p class="mt-2 text-sm text-ink/65 leading-relaxed">Resurfacing, IPL, and laser hair reduction.</p>
+              <span class="label-luxe text-bronze mt-3 block">from $220</span>
+            </div>
+          </article>
+
+          <!-- Body contouring (wide) -->
+          <article data-reveal class="service-card glass rounded-3xl p-7 md:col-span-2 flex flex-col sm:flex-row sm:items-center gap-6 justify-between">
+            <div class="flex items-start gap-5">
+              <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-bronze/10 text-bronze" aria-hidden="true">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c0-3 2-5 5-5s5 2 5 5-2 5-5 5"/><path d="M16 7c2 0 5 1.5 5 5s-3 5-5 5"/></svg>
+              </span>
+              <div>
+                <h3 class="font-display text-2xl text-ink">Body Contouring</h3>
+                <p class="mt-2 max-w-sm text-sm text-ink/65 leading-relaxed">Non-invasive fat reduction and skin tightening to refine, not transform.</p>
+              </div>
+            </div>
+            <span class="label-luxe text-bronze sm:text-right">from $400 / session</span>
+          </article>
+
+          <!-- Skin care -->
+          <article data-reveal class="service-card glass rounded-3xl p-7 flex flex-col justify-between">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-plum/10 text-plum" aria-hidden="true">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            </span>
+            <div class="mt-5">
+              <h3 class="font-display text-2xl text-ink">Medical Skin Care</h3>
+              <p class="mt-2 text-sm text-ink/65 leading-relaxed">Prescription-grade regimens, built around your skin.</p>
+              <span class="label-luxe text-bronze mt-3 block">consult included</span>
+            </div>
+          </article>
+
+          <!-- IV wellness (wide) -->
+          <article data-reveal class="service-card glass rounded-3xl p-7 md:col-span-2 flex flex-col sm:flex-row sm:items-center gap-6 justify-between">
+            <div class="flex items-start gap-5">
+              <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-bronze/10 text-bronze" aria-hidden="true">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12M12 12 9 9M12 12l3-3M9 5h6l-1.5 4h-3L9 5Z"/></svg>
+              </span>
+              <div>
+                <h3 class="font-display text-2xl text-ink">IV Wellness</h3>
+                <p class="mt-2 max-w-sm text-sm text-ink/65 leading-relaxed">Hydration and vitamin infusions, administered by licensed nurses in private suites.</p>
+              </div>
+            </div>
+            <span class="label-luxe text-bronze sm:text-right">from $135</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" aria-labelledby="about-heading" class="py-24 md:py-40 px-6 bg-champagne/60">
+      <div class="mx-auto max-w-7xl grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+        <div class="relative order-2 lg:order-1">
+          <div class="lume-frame aspect-[5/6]" data-scale-img>
+            <img src="https://picsum.photos/seed/lumespa-provider/1000/1200" width="1000" height="1200" loading="lazy" alt="A Lume provider reviewing a personalized treatment plan with a client" class="lume-img h-full w-full object-cover" />
+          </div>
+          <div class="glass absolute -bottom-6 -right-2 sm:right-6 rounded-2xl px-6 py-5 max-w-[15rem]">
+            <p class="font-display text-4xl text-plum leading-none">15<span class="text-2xl align-top">+</span></p>
+            <p class="mt-1 text-sm text-ink/70 leading-snug">years of combined aesthetic medicine experience on staff</p>
+          </div>
+        </div>
+
+        <div class="order-1 lg:order-2">
+          <p class="label-luxe text-bronze mb-5" data-reveal>Our care</p>
+          <h2 id="about-heading" data-reveal class="font-display font-500 text-ink leading-[1.06]" style="font-size: clamp(2rem, 3.6vw, 3.5rem);">
+            Board-certified providers. One unhurried plan, made for you.
+          </h2>
+          <p data-reveal class="mt-6 text-lg text-ink/70 leading-relaxed">
+            Every visit begins with a conversation, not a chair. Our physicians and nurse injectors take time to understand your features and your comfort level before recommending anything — and we are candid when less is more.
+          </p>
+          <ul class="mt-8 space-y-5">
+            <li data-reveal class="flex items-start gap-4">
+              <span class="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-plum/10 text-plum" aria-hidden="true">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <span class="text-ink/80"><span class="font-medium text-ink">Physician oversight</span> on every treatment plan, with on-site medical direction.</span>
+            </li>
+            <li data-reveal class="flex items-start gap-4">
+              <span class="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-plum/10 text-plum" aria-hidden="true">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <span class="text-ink/80"><span class="font-medium text-ink">Honest guidance</span> — we will tell you when a treatment isn't right for you.</span>
+            </li>
+            <li data-reveal class="flex items-start gap-4">
+              <span class="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-plum/10 text-plum" aria-hidden="true">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <span class="text-ink/80"><span class="font-medium text-ink">FDA-cleared products</span> sourced through approved channels, never grey market.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHILOSOPHY (signature scroll) -->
+    <section id="philosophy" aria-labelledby="philosophy-heading" class="py-24 md:py-40 px-6 overflow-hidden">
+      <div class="mx-auto max-w-5xl text-center">
+        <p class="label-luxe text-bronze mb-8">Our philosophy</p>
+        <h2 id="philosophy-heading" class="font-display font-500 text-ink leading-[1.18]" style="font-size: clamp(1.75rem, 3.4vw, 3.25rem);">
+          <span id="philosophy-words">Beauty should feel like rest, not repair. We believe in subtle change, expert hands, and a space calm enough to let you exhale the moment you arrive.</span>
+        </h2>
+      </div>
+
+      <div class="mx-auto max-w-7xl mt-20 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="lume-frame aspect-[3/4]" data-scale-img>
+          <img src="https://picsum.photos/seed/lumespa-space1/700/933" width="700" height="933" loading="lazy" alt="Soft neutral reception lounge with linen seating" class="lume-img h-full w-full object-cover" />
+        </div>
+        <div class="lume-frame aspect-[3/4] md:mt-12" data-scale-img>
+          <img src="https://picsum.photos/seed/lumespa-space2/700/933" width="700" height="933" loading="lazy" alt="Treatment suite detail with warm bronze fixtures" class="lume-img h-full w-full object-cover" />
+        </div>
+        <div class="lume-frame aspect-[3/4]" data-scale-img>
+          <img src="https://picsum.photos/seed/lumespa-space3/700/933" width="700" height="933" loading="lazy" alt="Shelves of curated skincare in soft daylight" class="lume-img h-full w-full object-cover" />
+        </div>
+        <div class="lume-frame aspect-[3/4] md:mt-12" data-scale-img>
+          <img src="https://picsum.photos/seed/lumespa-space4/700/933" width="700" height="933" loading="lazy" alt="Private relaxation nook with diffused light" class="lume-img h-full w-full object-cover" />
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS / SOCIAL PROOF -->
+    <section id="testimonials" aria-labelledby="testimonials-heading" class="py-24 md:py-40 px-6 bg-champagne/60">
+      <div class="mx-auto max-w-7xl">
+        <div class="max-w-2xl mb-16">
+          <p class="label-luxe text-bronze mb-5" data-reveal>In their words</p>
+          <h2 id="testimonials-heading" data-reveal class="font-display font-500 text-ink leading-[1.05]" style="font-size: clamp(2rem, 3.6vw, 3.5rem);">
+            Quietly confident results, from people who keep coming back.
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <figure data-reveal class="glass rounded-3xl p-8 flex flex-col">
+            <svg class="h-7 w-7 text-plum/40 mb-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 7H6a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2H6a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4h4v2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2h-2a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4h4v2Z"/></svg>
+            <blockquote class="font-display text-xl text-ink/85 leading-snug flex-1">"My injector talked me out of half of what I came in asking for. The result looks like a good night's sleep, and I trust them completely now."</blockquote>
+            <figcaption class="mt-6 text-sm">
+              <span class="font-medium text-ink">Marisol</span>
+              <span class="text-ink/55"> &middot; Botox &amp; lip filler</span>
+            </figcaption>
+          </figure>
+
+          <figure data-reveal class="glass rounded-3xl p-8 flex flex-col md:mt-10">
+            <svg class="h-7 w-7 text-plum/40 mb-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 7H6a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2H6a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4h4v2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2h-2a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4h4v2Z"/></svg>
+            <blockquote class="font-display text-xl text-ink/85 leading-snug flex-1">"The space alone is worth the visit. But the Hydrafacial series genuinely changed my skin texture — three months in and I've stopped wearing foundation."</blockquote>
+            <figcaption class="mt-6 text-sm">
+              <span class="font-medium text-ink">Devon</span>
+              <span class="text-ink/55"> &middot; Medical facial series</span>
+            </figcaption>
+          </figure>
+
+          <figure data-reveal class="glass rounded-3xl p-8 flex flex-col">
+            <svg class="h-7 w-7 text-plum/40 mb-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 7H6a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2H6a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4h4v2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v2h-2a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4h4v2Z"/></svg>
+            <blockquote class="font-display text-xl text-ink/85 leading-snug flex-1">"I was nervous about laser resurfacing. They walked me through every step and checked in afterward. It felt clinical in the best way — safe and unhurried."</blockquote>
+            <figcaption class="mt-6 text-sm">
+              <span class="font-medium text-ink">Priya</span>
+              <span class="text-ink/55"> &middot; Laser resurfacing</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <!-- Trust signals -->
+        <div data-reveal class="mt-16 flex flex-wrap items-center justify-center gap-x-10 gap-y-5 text-ink/60">
+          <span class="flex items-center gap-2 text-sm font-medium">
+            <svg class="h-5 w-5 text-plum" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 8.4 8 11 4.6-2.6 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+            Board-certified providers
+          </span>
+          <span class="flex items-center gap-2 text-sm font-medium">
+            <svg class="h-5 w-5 text-plum" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg>
+            FDA-cleared products
+          </span>
+          <span class="flex items-center gap-2 text-sm font-medium">
+            <svg class="h-5 w-5 text-plum" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M2 12h20" opacity="0"/><path d="M12 21s-7-4.35-7-10a7 7 0 0 1 14 0c0 5.65-7 10-7 10Z"/><circle cx="12" cy="11" r="2.5"/></svg>
+            Licensed medical staff
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA BAND -->
+    <section id="book" aria-labelledby="cta-heading" class="px-6 py-20 md:py-28">
+      <div class="mx-auto max-w-7xl relative overflow-hidden rounded-[2rem] bg-plum-deep px-7 sm:px-12 py-16 md:py-24 text-center">
+        <div class="absolute inset-0 -z-0" aria-hidden="true">
+          <div class="absolute -top-20 -left-16 h-80 w-80 rounded-full bg-bronze/30 blur-3xl"></div>
+          <div class="absolute -bottom-24 -right-10 h-96 w-96 rounded-full bg-blush/20 blur-3xl"></div>
+        </div>
+        <div class="relative z-10 mx-auto max-w-3xl">
+          <p class="label-luxe text-blush/90 mb-6">Begin with a conversation</p>
+          <h2 id="cta-heading" class="font-display font-500 text-cream leading-[1.05]" style="font-size: clamp(2.25rem, 4.5vw, 4.25rem);">
+            Your complimentary consultation is the only commitment.
+          </h2>
+          <p class="mt-6 text-lg text-cream/75 leading-relaxed">
+            Sit down with a provider, ask everything, and leave with a plan — or with nothing at all. There is never pressure to book a treatment.
+          </p>
+          <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
+            <a href="tel:+13128471928" class="btn-primary inline-flex items-center justify-center min-h-[52px] rounded-full bg-cream px-8 text-base font-medium text-plum-deep">
+              Call (312) 847-1928
+            </a>
+            <a href="mailto:hello@lumemedspa.com" class="btn-ghost inline-flex items-center justify-center gap-2 min-h-[52px] rounded-full border border-cream/40 px-8 text-base font-medium text-cream">
+              Request a callback
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="relative z-10 px-6 pt-20 pb-10 bg-champagne/70 border-t border-blush/50">
+    <div class="mx-auto max-w-7xl grid gap-12 md:grid-cols-12">
+      <div class="md:col-span-5">
+        <div class="flex items-center gap-2">
+          <span aria-hidden="true" class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-plum/30 text-plum font-display text-xl leading-none">L</span>
+          <span class="font-display text-2xl text-ink leading-none">Lume<span class="text-plum"> Med Spa</span></span>
+        </div>
+        <p class="mt-5 max-w-sm text-ink/65 leading-relaxed">Physician-led aesthetic medicine and skin wellness in a calm, considered setting.</p>
+        <div class="mt-6 flex items-center gap-3">
+          <a href="https://instagram.com" aria-label="Lume Med Spa on Instagram" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-plum/25 text-plum hover:bg-plum hover:text-cream transition-colors">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
+          </a>
+          <a href="https://facebook.com" aria-label="Lume Med Spa on Facebook" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-plum/25 text-plum hover:bg-plum hover:text-cream transition-colors">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3Z"/></svg>
+          </a>
+          <a href="https://tiktok.com" aria-label="Lume Med Spa on TikTok" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-plum/25 text-plum hover:bg-plum hover:text-cream transition-colors">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4c.5 2 2 4 5 4"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <nav aria-label="Footer" class="md:col-span-3">
+        <h2 class="label-luxe text-bronze mb-5">Explore</h2>
+        <ul class="space-y-3 text-ink/70">
+          <li><a href="#services" class="hover:text-plum transition-colors">Services</a></li>
+          <li><a href="#about" class="hover:text-plum transition-colors">Our Care</a></li>
+          <li><a href="#philosophy" class="hover:text-plum transition-colors">Philosophy</a></li>
+          <li><a href="#testimonials" class="hover:text-plum transition-colors">Results</a></li>
+          <li><a href="#book" class="hover:text-plum transition-colors">Book Consultation</a></li>
+        </ul>
+      </nav>
+
+      <address class="md:col-span-4 not-italic">
+        <h2 class="label-luxe text-bronze mb-5">Visit</h2>
+        <p class="text-ink/75 leading-relaxed">
+          Lume Med Spa<br />
+          218 N Wells Street, Suite 400<br />
+          Chicago, IL 60606
+        </p>
+        <p class="mt-4 text-ink/75 leading-relaxed">
+          <a href="tel:+13128471928" class="hover:text-plum transition-colors">(312) 847-1928</a><br />
+          <a href="mailto:hello@lumemedspa.com" class="hover:text-plum transition-colors">hello@lumemedspa.com</a>
+        </p>
+        <p class="mt-4 text-sm text-ink/55 leading-relaxed">
+          Tue–Fri 9am–7pm<br />
+          Sat 9am–4pm &middot; Sun &amp; Mon closed
+        </p>
+      </address>
+    </div>
+
+    <div class="mx-auto max-w-7xl mt-14 pt-8 border-t border-blush/50 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-ink/50">
+      <p>&copy; 2026 Lume Med Spa. All rights reserved.</p>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-plum transition-colors">Privacy</a>
+        <a href="#" class="hover:text-plum transition-colors">Terms</a>
+        <a href="#" class="hover:text-plum transition-colors">Accessibility</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce || typeof gsap === 'undefined') return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Hero soft staggered reveal
+      gsap.set('[data-hero]', { opacity: 0, y: 26 });
+      gsap.to('[data-hero]', {
+        opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.15,
+      });
+
+      // Section reveals
+      gsap.utils.toArray('[data-reveal]').forEach((el) => {
+        gsap.fromTo(el, { opacity: 0, y: 30 }, {
+          opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 86%' },
+        });
+      });
+
+      // Signature: scrubbed word-by-word philosophy reveal
+      const phil = document.getElementById('philosophy-words');
+      if (phil) {
+        const words = phil.textContent.trim().split(/\s+/);
+        phil.innerHTML = words.map((w) => '<span class="word">' + w + '</span>').join(' ');
+        const spans = phil.querySelectorAll('.word');
+        gsap.set(spans, { opacity: 0.16 });
+        gsap.to(spans, {
+          opacity: 1, ease: 'none', stagger: 0.5,
+          scrollTrigger: {
+            trigger: '#philosophy', start: 'top 70%', end: 'bottom 60%', scrub: 0.6,
+          },
+        });
+      }
+
+      // Signature: gentle image scale-on-scroll
+      gsap.utils.toArray('[data-scale-img] img').forEach((img) => {
+        gsap.fromTo(img, { scale: 1.14 }, {
+          scale: 1, ease: 'none',
+          scrollTrigger: { trigger: img, start: 'top bottom', end: 'bottom top', scrub: 1 },
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
